@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu - La Cuisine</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #1a1a1a;
+      --secondary-color: #2d2d2d;
+      --accent-color: #ff4d4d;
+      --text-color: #ffffff;
+      --text-secondary: #b3b3b3;
+      --dark-bg: #121212;
+      --card-bg: rgba(45, 45, 45, 0.95);
+      --hover-color: #ff6666;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: var(--primary-color);
+      color: var(--text-color);
+      padding: 1rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem 0;
+    }
+
+    nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--accent-color);
+      transition: width 0.3s ease;
+      z-index: -1;
+      border-radius: 25px;
+    }
+
+    nav a:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    nav a:hover::before {
+      width: 100%;
+    }
+
+    .menu-container {
+      max-width: 1200px;
+      margin: 100px auto 50px;
+      padding: 2rem;
+    }
+
+    .menu-section {
+      margin-bottom: 4rem;
+    }
+
+    .menu-section h2 {
+      text-align: center;
+      color: var(--accent-color);
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .menu-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--accent-color);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .menu-item {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: transform 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .menu-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .menu-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .menu-item h3 {
+      color: var(--accent-color);
+      margin: 0.5rem 0;
+    }
+
+    .menu-item .price {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+
+    .menu-item .description {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .menu-item .ingredients {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .menu-category {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .category-btn {
+      padding: 0.5rem 1.5rem;
+      border: 2px solid var(--accent-color);
+      background: transparent;
+      color: var(--text-color);
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .category-btn:hover,
+    .category-btn.active {
+      background: var(--accent-color);
+      color: var(--text-color);
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .menu-container {
+        margin-top: 150px;
+      }
+    }
+
+    .animated-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(45deg, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+    }
+
+    .animated-background::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover;
+      opacity: 0.3;
+      animation: zoomEffect 20s infinite alternate;
+    }
+
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 77, 77, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 77, 77, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 77, 77, 0.1) 0%, transparent 50%);
+      animation: gradientMove 15s ease infinite;
+    }
+
+    @keyframes zoomEffect {
+      0% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(1.1);
+        opacity: 0.4;
+      }
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 0%;
+      }
+      50% {
+        background-position: 100% 100%;
+      }
+      100% {
+        background-position: 0% 0%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-background">
+    <div class="floating-elements"></div>
+  </div>
+  <header>
+    <nav>
+      <a href="html.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="reservations.html">Reservations</a>
+    </nav>
+  </header>
+
+  <div class="menu-container">
+    <div class="menu-category">
+      <button class="category-btn active">All</button>
+      <button class="category-btn">Appetizers</button>
+      <button class="category-btn">Main Courses</button>
+      <button class="category-btn">Desserts</button>
+      <button class="category-btn">Drinks</button>
+    </div>
+
+    <div class="menu-section">
+      <h2>Appetizers</h2>
+      <div class="menu-grid">
+        <div class="menu-item">
+          <img src="lumpia.jpg" alt="Lumpia Shanghai">
+          <h3>Lumpia Shanghai</h3>
+          <p class="price">₱180</p>
+          <p class="description">Crispy spring rolls filled with ground pork and vegetables</p>
+          <p class="ingredients">Pork, carrots, onions, garlic, spring roll wrapper</p>
+        </div>
+        <div class="menu-item">
+          <img src="sisig.jpg" alt="Sisig">
+          <h3>Sisig</h3>
+          <p class="price">₱220</p>
+          <p class="description">Sizzling pork dish with onions and chili peppers</p>
+          <p class="ingredients">Pork face, onions, chili peppers, calamansi</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h2>Main Courses</h2>
+      <div class="menu-grid">
+        <div class="menu-item">
+          <img src="adobo.jpg" alt="Chicken Adobo">
+          <h3>Chicken Adobo</h3>
+          <p class="price">₱250</p>
+          <p class="description">Classic Filipino dish with chicken braised in soy sauce and vinegar</p>
+          <p class="ingredients">Chicken, soy sauce, vinegar, garlic, bay leaves</p>
+        </div>
+        <div class="menu-item">
+          <img src="sinigang.jpg" alt="Sinigang">
+          <h3>Sinigang</h3>
+          <p class="price">₱280</p>
+          <p class="description">Sour soup with pork and vegetables</p>
+          <p class="ingredients">Pork, tamarind, vegetables, fish sauce</p>
+        </div>
+        <div class="menu-item">
+          <img src="kare kare.jpg" alt="Kare-Kare">
+          <h3>Kare-Kare</h3>
+          <p class="price">₱320</p>
+          <p class="description">Oxtail stew in peanut sauce</p>
+          <p class="ingredients">Oxtail, peanut butter, vegetables, shrimp paste</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h2>Desserts</h2>
+      <div class="menu-grid">
+        <div class="menu-item">
+          <img src="halo halo.jpg" alt="Halo-Halo">
+          <h3>Halo-Halo</h3>
+          <p class="price">₱150</p>
+          <p class="description">Filipino shaved ice dessert with various toppings</p>
+          <p class="ingredients">Shaved ice, sweetened fruits, leche flan, ube ice cream</p>
+        </div>
+        <div class="menu-item">
+          <img src="lecheflan.jpg" alt="Leche Flan">
+          <h3>Leche Flan</h3>
+          <p class="price">₱120</p>
+          <p class="description">Creamy caramel custard</p>
+          <p class="ingredients">Eggs, milk, sugar, vanilla</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h2>Drinks</h2>
+      <div class="menu-grid">
+        <div class="menu-item">
+          <img src="mango shake.jpg" alt="Mango Shake">
+          <h3>Mango Shake</h3>
+          <p class="price">₱120</p>
+          <p class="description">Refreshing mango smoothie</p>
+          <p class="ingredients">Fresh mango, milk, ice</p>
+        </div>
+        <div class="menu-item">
+          <img src="buko.jpg" alt="Buko Juice">
+          <h3>Buko Juice</h3>
+          <p class="price">₱100</p>
+          <p class="description">Fresh coconut water</p>
+          <p class="ingredients">Young coconut water, coconut meat</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Category filtering
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    const menuSections = document.querySelectorAll('.menu-section');
+
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        btn.classList.add('active');
+
+        const category = btn.textContent.toLowerCase();
+        
+        menuSections.forEach(section => {
+          if (category === 'all' || section.querySelector('h2').textContent.toLowerCase().includes(category)) {
+            section.style.display = 'block';
+          } else {
+            section.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html> 

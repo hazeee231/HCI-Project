@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reservations - La Cuisine</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #1a1a1a;
+      --secondary-color: #2d2d2d;
+      --accent-color: #ff4d4d;
+      --text-color: #ffffff;
+      --text-secondary: #b3b3b3;
+      --dark-bg: #121212;
+      --card-bg: rgba(45, 45, 45, 0.95);
+      --hover-color: #ff6666;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+      background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                      url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    header {
+      background: var(--primary-color);
+      color: var(--text-color);
+      padding: 1rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem 0;
+    }
+
+    nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--accent-color);
+      transition: width 0.3s ease;
+      z-index: -1;
+      border-radius: 25px;
+    }
+
+    nav a:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    nav a:hover::before {
+      width: 100%;
+    }
+
+    .container {
+      padding: 8rem 2rem 4rem;
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .reservation-info {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .info-section {
+      margin-bottom: 2rem;
+    }
+
+    .info-section h3 {
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-section p {
+      color: var(--text-secondary);
+      margin: 0.5rem 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      color: var(--text-color);
+      grid-column: 1 / -1;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--accent-color);
+    }
+
+    form {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    form input, form textarea, form select {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary-color);
+      color: var(--text-color);
+      border: 2px solid var(--secondary-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    form input:focus, form textarea:focus, form select:focus {
+      border-color: var(--accent-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.1);
+    }
+
+    form button {
+      background: var(--accent-color);
+      color: var(--text-color);
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    form button:hover {
+      background: var(--hover-color);
+      transform: translateY(-2px);
+    }
+
+    .form-status {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .form-status.success {
+      display: block;
+      background: rgba(76, 175, 80, 0.1);
+      color: #4CAF50;
+      border: 1px solid #4CAF50;
+    }
+
+    .form-status.error {
+      display: block;
+      background: rgba(244, 67, 54, 0.1);
+      color: #F44336;
+      border: 1px solid #F44336;
+    }
+
+    .submit-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .required-field::after {
+      content: '*';
+      color: var(--accent-color);
+      margin-left: 4px;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="html.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="index.html#gallery">Gallery</a>
+      <a href="index.html#about">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="reservations.html">Reservations</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2 class="section-title">Make a Reservation</h2>
+    
+    <div class="reservation-info">
+      <div class="info-section">
+        <h3><i class="fas fa-clock"></i> Opening Hours</h3>
+        <p>Monday - Friday: 11:00 AM - 10:00 PM</p>
+        <p>Saturday - Sunday: 10:00 AM - 11:00 PM</p>
+      </div>
+      
+      <div class="info-section">
+        <h3><i class="fas fa-phone"></i> Contact Information</h3>
+        <p>Phone: +639362243412</p>
+        <p>Email: contact@lacuisine.com</p>
+      </div>
+      
+      <div class="info-section">
+        <h3><i class="fas fa-info-circle"></i> Reservation Policy</h3>
+        <p>• Reservations are held for 15 minutes</p>
+        <p>• Groups of 6+ require 24-hour notice</p>
+        <p>• Special requests can be noted in the form</p>
+      </div>
+    </div>
+
+    <form id="reservation-form">
+      <div class="form-group">
+        <label class="required-field">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      </div>
+      <div class="form-group">
+        <label class="required-field">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label class="required-field">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+      </div>
+      <div class="form-group">
+        <label class="required-field">Date</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+      <div class="form-group">
+        <label class="required-field">Time</label>
+        <select id="time" name="time" required>
+          <option value="">Select a time</option>
+          <option value="11:00">11:00 AM</option>
+          <option value="12:00">12:00 PM</option>
+          <option value="13:00">1:00 PM</option>
+          <option value="18:00">6:00 PM</option>
+          <option value="19:00">7:00 PM</option>
+          <option value="20:00">8:00 PM</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="required-field">Number of Guests</label>
+        <select id="guests" name="guests" required>
+          <option value="">Select number of guests</option>
+          <option value="1">1 Person</option>
+          <option value="2">2 People</option>
+          <option value="3">3 People</option>
+          <option value="4">4 People</option>
+          <option value="5+">5+ People</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Special Requests</label>
+        <textarea id="specialRequests" name="specialRequests" placeholder="Any special requests or dietary requirements?"></textarea>
+      </div>
+      <div class="form-status"></div>
+      <button type="submit" class="submit-btn">
+        <span class="btn-text">Book a Table</span>
+        <span class="loading-spinner"></span>
+      </button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('reservation-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const form = e.target;
+      const submitBtn = form.querySelector('.submit-btn');
+      const statusDiv = form.querySelector('.form-status');
+      
+      // Show loading state
+      submitBtn.classList.add('loading');
+      statusDiv.style.display = 'none';
+      
+      try {
+        const formData = {
+          name: form.name.value,
+          email: form.email.value,
+          phone: form.phone.value,
+          date: form.date.value,
+          time: form.time.value,
+          guests: form.guests.value,
+          specialRequests: form.specialRequests.value
+        };
+
+        const response = await fetch('http://localhost:3000/api/reservations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Show success message
+          statusDiv.className = 'form-status success';
+          statusDiv.textContent = data.message;
+          form.reset();
+        } else {
+          throw new Error(data.error || 'Failed to make reservation');
+        }
+      } catch (error) {
+        // Show error message
+        statusDiv.className = 'form-status error';
+        statusDiv.textContent = error.message || 'Failed to make reservation. Please try again.';
+      } finally {
+        // Hide loading state
+        submitBtn.classList.remove('loading');
+        statusDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html> 

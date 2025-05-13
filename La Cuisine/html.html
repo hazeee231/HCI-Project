@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Cuisine</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #1a1a1a;
+      --secondary-color: #2d2d2d;
+      --accent-color: #ff4d4d;
+      --text-color: #ffffff;
+      --text-secondary: #b3b3b3;
+      --dark-bg: #121212;
+      --card-bg: rgba(45, 45, 45, 0.95);
+      --hover-color: #ff6666;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .animated-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(45deg, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+    }
+
+    .animated-background::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover;
+      opacity: 0.3;
+      animation: zoomEffect 20s infinite alternate;
+    }
+
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 77, 77, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 77, 77, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 77, 77, 0.1) 0%, transparent 50%);
+      animation: gradientMove 15s ease infinite;
+    }
+
+    .floating-element {
+      position: absolute;
+      opacity: 0.15;
+      animation: float 15s infinite linear;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+    }
+
+    .chef-hat {
+      width: 60px;
+      height: 60px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2c-2.5 0-4.5 2-4.5 4.5 0 1.5.8 2.8 2 3.5v2h5v-2c1.2-.7 2-2 2-3.5C16.5 4 14.5 2 12 2zm0 2c1.4 0 2.5 1.1 2.5 2.5S13.4 9 12 9s-2.5-1.1-2.5-2.5S10.6 4 12 4z"/><path d="M7 8v2h2v2H5v-2h2V8H7zm10 0v2h2v2h-4v-2h2V8h-2z"/></svg>') center/contain no-repeat;
+    }
+
+    .spatula {
+      width: 40px;
+      height: 40px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/><path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z"/></svg>') center/contain no-repeat;
+      transform: rotate(45deg);
+    }
+
+    .plate {
+      width: 50px;
+      height: 50px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="8" fill="none" stroke="white" stroke-width="1"/></svg>') center/contain no-repeat;
+    }
+
+    .fork {
+      width: 35px;
+      height: 35px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M11 2v20h2V2h-2zm-4 0v20h2V2H7zm8 0v20h2V2h-2z"/></svg>') center/contain no-repeat;
+      transform: rotate(45deg);
+    }
+
+    .knife {
+      width: 35px;
+      height: 35px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M7 2l10 10-5 5-5-5V2z"/></svg>') center/contain no-repeat;
+      transform: rotate(-45deg);
+    }
+
+    .floating-element:nth-child(1) {
+      top: 15%;
+      left: 5%;
+      animation-delay: 0s;
+      transform: scale(1.2);
+    }
+
+    .floating-element:nth-child(2) {
+      top: 65%;
+      left: 85%;
+      animation-delay: -5s;
+      transform: scale(0.8);
+    }
+
+    .floating-element:nth-child(3) {
+      top: 35%;
+      left: 45%;
+      animation-delay: -10s;
+      transform: scale(1.5);
+    }
+
+    .floating-element:nth-child(4) {
+      top: 85%;
+      left: 15%;
+      animation-delay: -15s;
+      transform: scale(0.9);
+    }
+
+    .floating-element:nth-child(5) {
+      top: 25%;
+      left: 75%;
+      animation-delay: -7s;
+      transform: scale(1.1);
+    }
+
+    .floating-element:nth-child(6) {
+      top: 75%;
+      left: 25%;
+      animation-delay: -12s;
+      transform: scale(0.7);
+    }
+
+    .floating-element:nth-child(7) {
+      top: 10%;
+      left: 60%;
+      animation-delay: -3s;
+      transform: scale(1.3);
+    }
+
+    .floating-element:nth-child(8) {
+      top: 50%;
+      left: 90%;
+      animation-delay: -8s;
+      transform: scale(0.85);
+    }
+
+    .floating-element:nth-child(9) {
+      top: 90%;
+      left: 40%;
+      animation-delay: -13s;
+      transform: scale(1.4);
+    }
+
+    .floating-element:nth-child(10) {
+      top: 30%;
+      left: 20%;
+      animation-delay: -6s;
+      transform: scale(0.95);
+    }
+
+    .floating-element:nth-child(11) {
+      top: 70%;
+      left: 70%;
+      animation-delay: -11s;
+      transform: scale(1.25);
+    }
+
+    .floating-element:nth-child(12) {
+      top: 45%;
+      left: 35%;
+      animation-delay: -16s;
+      transform: scale(0.75);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(50px, 50px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 100px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-50px, 50px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 0%;
+      }
+      50% {
+        background-position: 100% 100%;
+      }
+      100% {
+        background-position: 0% 0%;
+      }
+    }
+
+    @keyframes zoomEffect {
+      0% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(1.1);
+        opacity: 0.4;
+      }
+    }
+
+    header {
+      background: var(--primary-color);
+      color: var(--text-color);
+      padding: 1rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem 0;
+    }
+
+    nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--accent-color);
+      transition: width 0.3s ease;
+      z-index: -1;
+      border-radius: 25px;
+    }
+
+    nav a:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    nav a:hover::before {
+      width: 100%;
+    }
+
+    .hero {
+      height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                  url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      margin-top: 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8));
+      z-index: -1;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      padding: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1s ease 0.3s;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: var(--accent-color);
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: transform 0.3s ease;
+    }
+
+    .btn:hover {
+      background: var(--hover-color);
+    }
+
+    .container {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      color: var(--text-color);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--accent-color);
+    }
+
+    section {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 6rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: var(--primary-color);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .menu-item {
+      background: var(--secondary-color);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--accent-color), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .menu-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .menu-item:hover::before {
+      opacity: 0.1;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      padding: 1rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 1rem;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .gallery-item:hover .gallery-caption {
+      transform: translateY(0);
+    }
+
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover::after {
+      opacity: 1;
+    }
+
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-card {
+      background: var(--secondary-color);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .contact-card i {
+      font-size: 2.5rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    form {
+      background: var(--secondary-color);
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    form input, form textarea, form select {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      background: var(--primary-color);
+      color: var(--text-color);
+      border: 2px solid var(--secondary-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    form input:focus, form textarea:focus, form select:focus {
+      border-color: var(--accent-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.1);
+    }
+
+    form button {
+      background: var(--accent-color);
+      color: var(--text-color);
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    form button:hover {
+      background: var(--hover-color);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .social-links a {
+      color: var(--text-color);
+      font-size: 1.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--accent-color);
+    }
+
+    footer {
+      background: var(--primary-color);
+      color: var(--text-color);
+      text-align: center;
+      padding: 2rem;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+      }
+    }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      margin-top: 2rem;
+    }
+
+    .menu-description {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: block;
+      margin-top: 0.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .menu-item ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu-item li {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item li:last-child {
+      border-bottom: none;
+    }
+
+    .chef-team {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .chef-card {
+      background: var(--secondary-color);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .chef-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .chef-image-frame {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      border-radius: 50%;
+      padding: 5px;
+      background: linear-gradient(45deg, var(--accent-color), var(--hover-color));
+    }
+
+    .chef-image-frame img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--secondary-color);
+    }
+
+    .chef-card h3 {
+      color: var(--text-color);
+      margin: 0.5rem 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .chef-card .position {
+      color: var(--accent-color);
+      font-weight: 600;
+      margin: 0.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    .chef-card .description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .promotions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .promo-card {
+      background: var(--secondary-color);
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .promo-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .promo-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--accent-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    .promo-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .promo-content {
+      padding: 1.5rem;
+    }
+
+    .promo-content h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--text-color);
+    }
+
+    .promo-price {
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      font-weight: 600;
+      margin: 0.5rem 0;
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-left: 0.5rem;
+    }
+
+    .promo-time {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin: 0.5rem 0;
+    }
+
+    .reviews-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .review-card {
+      background: var(--secondary-color);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .review-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+    }
+
+    .reviewer-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent-color);
+    }
+
+    .reviewer-info {
+      flex: 1;
+    }
+
+    .reviewer-info h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .stars {
+      display: flex;
+      gap: 0.2rem;
+    }
+
+    .stars i {
+      color: var(--accent-color);
+      font-size: 1.1rem;
+    }
+
+    .review-text {
+      margin: 0 0 1.5rem 0;
+      line-height: 1.6;
+      color: var(--text-color);
+      flex-grow: 1;
+      font-style: italic;
+    }
+
+    .review-date {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    .review-stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 3rem;
+      padding: 2rem;
+      background: var(--secondary-color);
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .stat-item h3 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--accent-color);
+    }
+
+    .stat-item .stars {
+      justify-content: center;
+      margin: 0.5rem 0;
+    }
+
+    .stat-item p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    @media (max-width: 1024px) {
+      .reviews-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .reviews-container {
+        grid-template-columns: 1fr;
+      }
+
+      .review-stats {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1.5rem;
+      }
+
+      .stat-item {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .stat-item:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-status {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .form-status.success {
+      display: block;
+      background: rgba(76, 175, 80, 0.1);
+      color: #4CAF50;
+      border: 1px solid #4CAF50;
+    }
+
+    .form-status.error {
+      display: block;
+      background: rgba(244, 67, 54, 0.1);
+      color: #F44336;
+      border: 1px solid #F44336;
+    }
+
+    .submit-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .submit-btn.loading .btn-text {
+      opacity: 0.7;
+    }
+
+    .submit-btn.loading .loading-spinner {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-background">
+    <div class="floating-elements">
+      <div class="floating-element chef-hat"></div>
+      <div class="floating-element spatula"></div>
+      <div class="floating-element plate"></div>
+      <div class="floating-element fork"></div>
+      <div class="floating-element knife"></div>
+      <div class="floating-element chef-hat"></div>
+      <div class="floating-element spatula"></div>
+      <div class="floating-element plate"></div>
+      <div class="floating-element fork"></div>
+      <div class="floating-element knife"></div>
+      <div class="floating-element chef-hat"></div>
+      <div class="floating-element spatula"></div>
+    </div>
+  </div>
+
+  <header>
+    <nav>
+      <a href="html.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#about">About Us</a>
+      <a href="#contact">Contact</a>
+      <a href="reservations.html">Reservations</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>La Cuisine</h1>
+      <p>Experience culinary excellence in an elegant atmosphere</p>
+      <a href="reservations.html" class="btn">Book a Table</a>
+    </div>
+  </section>
+
+  <div class="container">
+    <section id="promotions">
+      <h2 class="section-title">Today's Specials</h2>
+      <div class="promotions-grid">
+        <div class="promo-card">
+          <div class="promo-badge">Lunch Special</div>
+          <img src="adobopork.jpeg" alt="Lunch Special">
+          <div class="promo-content">
+            <h3>Adobo Rice Bowl</h3>
+            <p class="promo-price">₱199 <span class="original-price">₱250</span></p>
+            <p class="promo-time">11:00 AM - 2:00 PM</p>
+          </div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-badge">Happy Hour</div>
+          <img src="mango shake.jpg" alt="Happy Hour">
+          <div class="promo-content">
+            <h3>Buy 1 Take 1 Drinks</h3>
+            <p class="promo-time">3:00 PM - 6:00 PM</p>
+          </div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-badge">Weekend Special</div>
+          <img src="kare kare.jpg" alt="Weekend Special">
+          <div class="promo-content">
+            <h3>Family Feast Package</h3>
+            <p class="promo-price">₱1,499 <span class="original-price">₱2,000</span></p>
+            <p>Includes 4 main dishes + rice + drinks</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <h2 class="section-title">Customers Feedback</h2>
+      <div class="reviews-container">
+        <div class="review-card">
+          <div class="review-header">
+            <img src="ramsay.jpg" alt="Customer" class="reviewer-image">
+            <div class="reviewer-info">
+              <h3>Gordon Ramsay</h3>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="review-text">"The best Filipino restaurant in town! Their Adobo is absolutely perfect, and the service is exceptional. I love bringing my family here for special occasions."</p>
+          <p class="review-date">March 15, 2024</p>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <img src="joe.jpg" alt="Customer" class="reviewer-image">
+            <div class="reviewer-info">
+              <h3>Joe Bastianich</h3>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+          <p class="review-text">"Their Sinigang is the most authentic I've tasted outside of my grandmother's kitchen. The staff is friendly and the atmosphere is perfect for family gatherings."</p>
+          <p class="review-date">March 10, 2024</p>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <img src="elliot.jpg" alt="Customer" class="reviewer-image">
+            <div class="reviewer-info">
+              <h3>Graham Elliot</h3>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="review-text">"The Halo-Halo here is amazing! Perfect balance of sweetness and creaminess. I also love their Kare-Kare - the peanut sauce is rich and flavorful."</p>
+          <p class="review-date">March 5, 2024</p>
+        </div>
+      </div>
+
+      <div class="review-stats">
+        <div class="stat-item">
+          <h3>4.8</h3>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <p>Average Rating</p>
+        </div>
+        <div class="stat-item">
+          <h3>500+</h3>
+          <p>Happy Customers</p>
+        </div>
+        <div class="stat-item">
+          <h3>98%</h3>
+          <p>Would Recommend</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <h2 class="section-title">Gallery</h2>
+      <div class="gallery">
+        <div class="gallery-item">
+          <img src="adobo.jpg" alt="Adobo">
+          <div class="gallery-caption">Classic Filipino Adobo</div>
+        </div>
+        <div class="gallery-item">
+          <img src="sinigang.jpg" alt="Sinigang">
+          <div class="gallery-caption">Hearty Sinigang Soup</div>
+        </div>
+        <div class="gallery-item">
+          <img src="kawali.jpg" alt="Lechon">
+          <div class="gallery-caption">Crispy Lechon Kawali</div>
+        </div>
+        <div class="gallery-item">
+          <img src="kare kare.jpg" alt="Kare-Kare">
+          <div class="gallery-caption">Rich Kare-Kare</div>
+        </div>
+        <div class="gallery-item">
+          <img src="halo halo.jpg" alt="Halo-Halo">
+          <div class="gallery-caption">Refreshing Halo-Halo</div>
+        </div>
+        <div class="gallery-item">
+          <img src="lumpia.jpg" alt="Lumpia">
+          <div class="gallery-caption">Crispy Lumpia Shanghai</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">About Us</h2>
+      <p>Welcome to La Cuisine, where soulful Filipino flavors come to life. Nestled in the heart of the Philippines, our restaurant is a modern tribute to the rich culinary heritage of Filipino culture.
+
+        At La Cuisine, we believe that food tells a story of family, tradition, and the warmth of shared moments. Our menu is a carefully curated collection of classic Filipino dishes, elevated with a modern twist, and prepared with the finest local ingredients. From the comforting aroma of sinigang to the bold flavors of adobo and the indulgent sweetness of halo-halo, every dish is a celebration of our identity and love for food.
+        
+        Whether you're a local or a visitor, we invite you to experience the heart of Filipino hospitality. At La Cuisine, we don't just serve meals we serve memories.</p>
+      
+      <div class="chef-team">
+        <div class="chef-card">
+          <div class="chef-image-frame">
+            <img src="macmac.jpg" alt="Executive Chef">
+          </div>
+          <h3>Marc Iverson Cañete</h3>
+          <p class="position">Executive Chef</p>
+          <p class="description">Leading our culinary vision with over 15 years of experience in fine dining.</p>
+        </div>
+
+        <div class="chef-card">
+          <div class="chef-image-frame">
+            <img src="sarip.jpg" alt="Sous Chef">
+          </div>
+          <h3>Joshua Leif Sarip</h3>
+          <p class="position">Sous Chef</p>
+          <p class="description">Mastering the art of kitchen management and culinary innovation.</p>
+        </div>
+
+        <div class="chef-card">
+          <div class="chef-image-frame">
+            <img src="baltazar.jpg" alt="Roast Chef">
+          </div>
+          <h3>Janeil Baltazar</h3>
+          <p class="position">Roast Chef</p>
+          <p class="description">Specializing in perfecting our signature roasted dishes.</p>
+        </div>
+
+        <div class="chef-card">
+          <div class="chef-image-frame">
+            <img src="bangcaya.jpg" alt="Head Chef">
+          </div>
+          <h3>Wilcynth Jhed Bangcaya</h3>
+          <p class="position">Head Chef</p>
+          <p class="description">Ensuring excellence in every dish that leaves our kitchen.</p>
+        </div>
+      </div>
+
+      <div class="contact-info">
+        <div class="contact-card">
+          <h3>Opening Hours</h3>
+          <p>Monday - Friday: 11:00 AM - 10:00 PM</p>
+          <p>Saturday - Sunday: 10:00 AM - 11:00 PM</p>
+        </div>
+        <div class="contact-card">
+          <h3>Location</h3>
+          <p>Bankerohan, Davao City</p>
+          <p>Davao City, FC 8000</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 class="section-title">Contact Us</h2>
+      <div class="contact-info">
+        <div class="contact-card">
+          <i class="fas fa-phone fa-2x"></i>
+          <p>+639362243412</p>
+        </div>
+        <div class="contact-card">
+          <i class="fas fa-envelope fa-2x"></i>
+          <p>contact@lacuisine.com</p>
+        </div>
+      </div>
+      <div class="map-container">
+        <iframe 
+          src="https://maps.google.com/maps?q=Bankerohan,+Davao+City,+Philippines&t=&z=15&ie=UTF8&iwloc=&output=embed&maptype=roadmap&style=element:geometry%7Ccolor:0x212121&style=element:labels.icon%7Cvisibility:off&style=element:labels.text.fill%7Ccolor:0x757575&style=element:labels.text.stroke%7Ccolor:0x212121&style=feature:administrative%7Celement:geometry%7Ccolor:0x757575&style=feature:administrative.country%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.locality%7Celement:labels.text.fill%7Ccolor:0xbdbdbd&style=feature:poi%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:poi.park%7Celement:geometry%7Ccolor:0x181818&style=feature:poi.park%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:poi.park%7Celement:labels.text.stroke%7Ccolor:0x1b1b1b&style=feature:road%7Celement:geometry.fill%7Ccolor:0x2c2c2c&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x8a8a8a&style=feature:road.arterial%7Celement:geometry%7Ccolor:0x373737&style=feature:road.highway%7Celement:geometry%7Ccolor:0x3c3c3c&style=feature:road.highway.controlled_access%7Celement:geometry%7Ccolor:0x4e4e4e&style=feature:road.local%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:transit%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:water%7Celement:geometry%7Ccolor:0x000000&style=feature:water%7Celement:labels.text.fill%7Ccolor:0x3d3d3d" 
+          allowfullscreen="" 
+          loading="lazy" 
+          title="Location Map">
+        </iframe>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+    </div>
+    <p>&copy; 2025 La Cuisine. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section').forEach((section) => {
+      observer.observe(section);
+    });
+
+    // Form submission handling
+    document.getElementById('reservation-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const form = e.target;
+      const submitBtn = form.querySelector('.submit-btn');
+      const statusDiv = form.querySelector('.form-status');
+      
+      // Show loading state
+      submitBtn.classList.add('loading');
+      statusDiv.style.display = 'none';
+      
+      try {
+        const formData = {
+          name: form.name.value,
+          email: form.email.value,
+          phone: form.phone.value,
+          date: form.date.value,
+          time: form.time.value,
+          guests: form.guests.value,
+          specialRequests: form.specialRequests.value
+        };
+
+        const response = await fetch('http://localhost:3000/api/reservations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Show success message
+          statusDiv.className = 'form-status success';
+          statusDiv.textContent = data.message;
+          form.reset();
+        } else {
+          throw new Error(data.error || 'Failed to make reservation');
+        }
+      } catch (error) {
+        // Show error message
+        statusDiv.className = 'form-status error';
+        statusDiv.textContent = error.message || 'Failed to make reservation. Please try again.';
+      } finally {
+        // Hide loading state
+        submitBtn.classList.remove('loading');
+        statusDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
